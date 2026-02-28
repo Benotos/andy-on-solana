@@ -441,30 +441,7 @@
         }
     </script>
 
-    <script>
-        // Use window.onload to ensure the external Jupiter script is fully loaded before initializing
-        window.onload = function() {
-            if (window.Jupiter) {
-                window.Jupiter.init({
-                    displayMode: "widget",
-                    integratedTargetId: "jupiter-plugin",
-                    endpoint: "https://api.mainnet-beta.solana.com", 
-                    
-                    // PRO TIP: When you have the live contract address, uncomment the formProps below 
-                    // and paste your CA into the initialOutputMint to force the widget to default to buying $ANDY!
-                    
-                    /*
-                    formProps: {
-                        fixedOutputMint: true,
-                        initialOutputMint: "TBA_OR_PASTE_CA_HERE",
-                    },
-                    */
-                });
-            } else {
-                console.error("Jupiter Plugin failed to load.");
-            }
-        };
-    </script>
+    
     <script src="https://plugin.jup.ag/plugin-v1.js"></script>
 
     <script>
