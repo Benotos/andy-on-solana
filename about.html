@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>$ANDY | About The Boy</title>
+    <style>
+        /* --- GLOBAL BUBBLY SYSTEM --- */
+        :root {
+            --andy-yellow: #fde028;
+            --andy-purple: #5e17eb;
+            --pepe-green: #4ade80;
+            --bubblegum: #ff90e8;
+            --cyan: #22d3ee;
+            --black: #111827;
+            --white: #ffffff;
+            --stroke: 4px solid var(--black);
+            --bouncy-shadow: 0px 8px 0px var(--black);
+            --bouncy-shadow-hover: 0px 0px 0px var(--black);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        }
+
+        body {
+            background-color: var(--bubblegum); /* Page specific color */
+            /* Candy-stripe background inverted direction from home */
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 255, 255, 0.25) 20px,
+                rgba(255, 255, 255, 0.25) 40px
+            );
+            color: var(--black);
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        /* --- STICKER-STYLE NAVIGATION --- */
+        header {
+            position: fixed;
+            width: calc(100% - 40px);
+            margin: 20px;
+            top: 0;
+            background: var(--white);
+            border: var(--stroke);
+            box-shadow: var(--bouncy-shadow);
+            border-radius: 50px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+        }
+
+        .logo-container {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            color: var(--andy-yellow);
+            -webkit-text-stroke: 2px var(--black);
+            text-shadow: 3px 3px 0 var(--andy-purple);
+            transform: rotate(-3deg);
+            animation: wiggle 3s infinite;
+            text-decoration: none;
+        }
+
+        /* Mobile Menu Setup */
+        .menu-checkbox { display: none; }
+        .menu-icon {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--black);
+            background: var(--andy-yellow);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            line-height: 40px;
+            box-shadow: 0 4px 0 var(--black);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+
+        nav ul li a.active {
+            background: var(--andy-yellow);
+            border: 2px solid var(--black);
+            transform: rotate(-2deg);
+        }
+
+        nav ul li a:hover:not(.active) {
+            background: var(--cyan);
+            border: 2px solid var(--black);
+            transform: translateY(-2px) rotate(3deg);
+        }
+
+        /* --- ABOUT HERO SECTION --- */
+        .about-hero {
+            padding: 160px 5% 60px;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            color: var(--white);
+            -webkit-text-stroke: 3px var(--black);
+            text-shadow: 6px 6px 0 var(--andy-purple);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            transform: rotate(-1deg);
+        }
+
+        .subtitle-badge {
+            display: inline-block;
+            background: var(--andy-yellow);
+            padding: 10px 25px;
+            border: var(--stroke);
+            border-radius: 30px;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 900;
+            box-shadow: 4px 4px 0 var(--black);
+            transform: rotate(2deg);
+            margin-bottom: 40px;
+        }
+
+        /* --- ZIG-ZAG LORE GRID --- */
+        .lore-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5% 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        .lore-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        /* Reverse row for zig-zag effect */
+        .lore-row.reverse {
+            direction: rtl;
+        }
+        .lore-row.reverse > * {
+            direction: ltr;
+        }
+
+        /* Complex CSS Speech Bubble */
+        .speech-bubble {
+            background: var(--white);
+            border: var(--stroke);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 12px 12px 0 rgba(0,0,0,0.2);
+            position: relative;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 700;
+            line-height: 1.6;
+            transition: transform 0.2s;
+        }
+
+        .speech-bubble:hover {
+            transform: scale(1.02) rotate(-1deg);
+        }
+
+        .speech-bubble h3 {
+            font-size: 2.5rem;
+            color: var(--andy-purple);
+            -webkit-text-stroke: 1px var(--black);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        /* The little tail on the speech bubble */
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 50px;
+            width: 0; height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--black);
+        }
+
+        .lore-row.reverse .speech-bubble::after {
+            left: auto;
+            right: 50px;
+        }
+
+        /* Polaroid / Sticker Image Frame */
+        .polaroid {
+            background: var(--white);
+            padding: 15px 15px 40px 15px;
+            border: var(--stroke);
+            border-radius: 10px;
+            box-shadow: 15px 15px 0 rgba(0,0,0,0.2);
+            position: relative;
+            transform: rotate(3deg);
+            animation: floatSticker 5s ease-in-out infinite;
+        }
+
+        .lore-row.reverse .polaroid {
+            transform: rotate(-3deg);
+            animation-delay: 1s;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            border: 2px solid var(--black);
+            background: var(--cyan); /* Placeholder background */
+        }
+
+        /* CSS Tape Effect on the Polaroid */
+        .polaroid::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 100px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px solid rgba(0,0,0,0.1);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        @keyframes floatSticker {
+            0%, 100% { transform: translateY(0) rotate(3deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
+        }
+
+        /* --- MOBILE QUERIES --- */
+        @media (max-width: 900px) {
+            header {
+                width: calc(100% - 20px);
+                margin: 10px;
+                border-radius: 20px;
+            }
+            .about-hero { padding-top: 140px; }
+            
+            /* Enable Mobile Menu */
+            .menu-icon { display: block; }
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                border: var(--stroke);
+                border-radius: 20px;
+                padding: 20px;
+                box-shadow: var(--bouncy-shadow);
+                margin-top: 10px;
+            }
+            .menu-checkbox:checked ~ nav ul { display: flex; }
+
+            /* Stack Grid for Mobile */
+            .lore-row, .lore-row.reverse {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                direction: ltr; /* Reset reverse on mobile */
+            }
+
+            .speech-bubble::after, .lore-row.reverse .speech-bubble::after {
+                left: 50px; /* Reset tail position on mobile */
+                right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-container">$ANDY</a>
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        <label for="menu-toggle" class="menu-icon">☰</label>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="tokenomics.html">Tokenomics</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="about-hero">
+        <h1 class="page-title">THE LORE</h1>
+        <div class="subtitle-badge">Where did he come from?</div>
+    </section>
+
+    <section class="lore-container">
+        <div class="lore-row">
+            <div class="speech-bubble">
+                <h3>The Boy's Club</h3>
+                <p>
+                    Long before the block-chains and the green candles, there was the Boy's Club. Andy has always been there, chilling on the couch, eating snacks, and watching his best friend Pepe take over the internet.
+                    <br><br>
+                    But you can only hold the camera for so long before it's time to step into the spotlight. 
+                </p>
+            </div>
+            <div class="polaroid">
+    <div style="aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center;">
+        <img src="meme4.webp" alt="Andy and Pepe" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px; border: 2px solid var(--black);">
+    </div>
+</div>
+        </div>
+
+        <div class="lore-row reverse">
+            <div class="speech-bubble" style="background: var(--cyan);">
+                <h3 style="color: var(--white); text-shadow: 2px 2px 0 var(--black);">Main Character Energy</h3>
+                <p>
+                    Andy isn't just a sidekick; he's the whole vibe. He represents the degenerate inside all of us that just wants to kick back, avoid responsibilities, and watch the chart go parabolic. 
+                    <br><br>
+                    It's the year of the dog. Frogs had their fun, but now it's time to run with the pack.
+                </p>
+            </div>
+            <div class="polaroid" style="background: var(--andy-yellow);">
+    <div style="aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center;">
+        <img src="meme26.webp" alt="Cool Andy Art" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px; border: 2px solid var(--black);">
+    </div>
+</div>
+        </div>
+    </section>
+
+</body>
+</html>

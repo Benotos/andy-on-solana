@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>$ANDY | Pepe's Best Friend</title>
+    <style>
+        /* --- BUBBLY CARTOON SYSTEM (NOT DONKE) --- */
+        :root {
+            --andy-yellow: #fde028;
+            --andy-purple: #5e17eb;
+            --pepe-green: #4ade80;
+            --bubblegum: #ff90e8;
+            --cyan: #22d3ee;
+            --black: #111827;
+            --white: #ffffff;
+            --stroke: 4px solid var(--black);
+            --bouncy-shadow: 0px 8px 0px var(--black);
+            --bouncy-shadow-hover: 0px 0px 0px var(--black);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Best for testing, import a Bubbly font later */
+        }
+
+        body {
+            background-color: var(--cyan);
+            /* Candy-stripe background instead of DONKE's dots */
+            background-image: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 255, 255, 0.2) 20px,
+                rgba(255, 255, 255, 0.2) 40px
+            );
+            color: var(--black);
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        /* --- STICKER-STYLE NAVIGATION --- */
+        header {
+            position: fixed;
+            width: calc(100% - 40px);
+            margin: 20px;
+            top: 0;
+            background: var(--white);
+            border: var(--stroke);
+            box-shadow: var(--bouncy-shadow);
+            border-radius: 50px; /* Fully rounded, unlike DONKE */
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+        }
+
+        .logo-container {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            color: var(--andy-yellow);
+            -webkit-text-stroke: 2px var(--black);
+            text-shadow: 3px 3px 0 var(--andy-purple);
+            transform: rotate(-3deg);
+            animation: wiggle 3s infinite;
+        }
+
+        /* Mobile Menu Setup */
+        .menu-checkbox { display: none; }
+        .menu-icon {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--black);
+            background: var(--andy-yellow);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            line-height: 40px;
+            box-shadow: 0 4px 0 var(--black);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+
+        nav ul li a:hover {
+            background: var(--bubblegum);
+            border: 2px solid var(--black);
+            transform: translateY(-2px) rotate(3deg);
+        }
+
+        /* --- BUBBLY HERO SECTION --- */
+        .hero {
+            min-height: 90vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 140px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 40px;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: 0.9;
+            color: var(--white);
+            -webkit-text-stroke: 3px var(--black);
+            text-shadow: 6px 6px 0 var(--andy-purple), 12px 12px 0 var(--pepe-green);
+            text-transform: uppercase;
+            transform: rotate(-2deg);
+        }
+
+        .hero-desc {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            background: var(--white);
+            padding: 20px;
+            border: var(--stroke);
+            border-radius: 20px; /* Bubbly shape */
+            font-weight: bold;
+            box-shadow: var(--bouncy-shadow);
+            transform: rotate(1deg);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+            border: var(--stroke);
+            border-radius: 50px; /* Pill shaped */
+            box-shadow: var(--bouncy-shadow);
+            transition: all 0.1s;
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn:active, .btn:hover {
+            transform: translateY(8px); /* Physically pushes down */
+            box-shadow: var(--bouncy-shadow-hover);
+        }
+
+        .btn-primary { background: var(--andy-yellow); }
+        .btn-secondary { background: var(--bubblegum); }
+
+        /* Floating Sticker Art Container */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: floatSticker 4s ease-in-out infinite;
+        }
+
+        .sticker-wrapper {
+            background: var(--white);
+            border: 8px solid var(--white); /* Thick white sticker border */
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 15px 15px 0 rgba(0,0,0,0.3);
+            transform: rotate(4deg);
+            max-width: 100%;
+        }
+
+        .sticker-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 30px;
+            border: var(--stroke);
+        }
+
+        /* --- THE MEME WALL (DOUBLE MARQUEE) --- */
+        .meme-section {
+            background: var(--andy-purple);
+            padding: 40px 0;
+            border-top: var(--stroke);
+            border-bottom: var(--stroke);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .meme-title {
+            text-align: center;
+            color: var(--andy-yellow);
+            font-size: 3rem;
+            -webkit-text-stroke: 2px var(--black);
+            text-shadow: 4px 4px 0 var(--black);
+            margin-bottom: 10px;
+        }
+
+        .marquee-track {
+            display: flex;
+            width: fit-content;
+            gap: 20px;
+        }
+
+        .track-left { animation: scrollLeft 30s linear infinite; }
+        .track-right { animation: scrollRight 30s linear infinite; }
+
+        .meme-card {
+            width: 250px;
+            height: 250px;
+            background: var(--white);
+            border: var(--stroke);
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 6px 6px 0 var(--black);
+            flex-shrink: 0;
+            transition: transform 0.2s;
+        }
+
+        .meme-card:hover {
+            transform: scale(1.1) rotate(-3deg);
+            z-index: 10;
+        }
+
+        .meme-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--black);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        @keyframes floatSticker {
+            0%, 100% { transform: translateY(0) rotate(4deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Scrolls half its width to loop */
+        }
+        @keyframes scrollRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* --- MOBILE QUERIES --- */
+        @media (max-width: 900px) {
+            header {
+                width: calc(100% - 20px);
+                margin: 10px;
+                border-radius: 20px;
+            }
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding-top: 120px;
+            }
+            .hero-desc { transform: rotate(0); }
+            
+            /* Enable Mobile Menu */
+            .menu-icon { display: block; }
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                border: var(--stroke);
+                border-radius: 20px;
+                padding: 20px;
+                box-shadow: var(--bouncy-shadow);
+                margin-top: 10px;
+            }
+            .menu-checkbox:checked ~ nav ul { display: flex; }
+            
+            .meme-card { width: 180px; height: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">$ANDY</div>
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        <label for="menu-toggle" class="menu-icon">☰</label>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="tokenomics.html">Tokenomics</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">IT'S<br>ANDY!</h1>
+            <p class="hero-desc">
+                Pepe's best friend. The ultimate boy's club degenerate. We are bringing the cartoon vibes straight to the blockchain. 
+            </p>
+            <div class="hero-buttons">
+                <a class="btn btn-primary">Join Club</a>
+                <a class="btn btn-secondary">Explore</a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="sticker-wrapper">
+                <div style="width: min(80vw, 400px); height: min(80vw, 400px); background: var(--andy-yellow); display: flex; align-items: center; justify-content: center; border-radius: 30px; border: var(--stroke);">
+                    <h2 style="text-align: center;">[LOGO]</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="meme-section">
+        <h2 class="meme-title">THE MEME STASH</h2>
+        
+        <div class="marquee-track track-left">
+            <div class="meme-card"><img src="meme1.webp" alt="Andy Meme 1"></div>
+            <div class="meme-card"><img src="mem2.webp" alt="Andy Meme 2"></div> <div class="meme-card"><img src="meme3.webp" alt="Andy Meme 3"></div>
+            <div class="meme-card"><img src="meme4.webp" alt="Andy Meme 4"></div>
+            <div class="meme-card"><img src="meme5.webp" alt="Andy Meme 5"></div>
+            <div class="meme-card"><img src="meme6.webp" alt="Andy Meme 6"></div>
+            <div class="meme-card"><img src="meme7.webp" alt="Andy Meme 7"></div>
+            <div class="meme-card"><img src="meme8.webp" alt="Andy Meme 8"></div>
+            <div class="meme-card"><img src="meme9.webp" alt="Andy Meme 9"></div>
+            <div class="meme-card"><img src="meme10.webp" alt="Andy Meme 10"></div>
+            <div class="meme-card"><img src="meme11.webp" alt="Andy Meme 11"></div>
+            <div class="meme-card"><img src="meme12.webp" alt="Andy Meme 12"></div>
+            <div class="meme-card"><img src="meme13.webp" alt="Andy Meme 13"></div>
+            <div class="meme-card"><img src="meme1.webp" alt="Andy Meme 1"></div>
+            <div class="meme-card"><img src="meme2.webp" alt="Andy Meme 2"></div>
+            <div class="meme-card"><img src="meme3.webp" alt="Andy Meme 3"></div>
+            <div class="meme-card"><img src="meme4.webp" alt="Andy Meme 4"></div>
+            <div class="meme-card"><img src="meme5.webp" alt="Andy Meme 5"></div>
+            <div class="meme-card"><img src="meme6.webp" alt="Andy Meme 6"></div>
+            <div class="meme-card"><img src="meme7.webp" alt="Andy Meme 7"></div>
+            <div class="meme-card"><img src="meme8.webp" alt="Andy Meme 8"></div>
+            <div class="meme-card"><img src="meme9.webp" alt="Andy Meme 9"></div>
+            <div class="meme-card"><img src="meme10.webp" alt="Andy Meme 10"></div>
+            <div class="meme-card"><img src="meme11.webp" alt="Andy Meme 11"></div>
+            <div class="meme-card"><img src="meme12.webp" alt="Andy Meme 12"></div>
+            <div class="meme-card"><img src="meme13.webp" alt="Andy Meme 13"></div>
+        </div>
+
+        <div class="marquee-track track-right">
+            <div class="meme-card"><img src="meme14.webp" alt="Andy Meme 14"></div>
+            <div class="meme-card"><img src="meme15.webp" alt="Andy Meme 15"></div>
+            <div class="meme-card"><img src="meme16.webp" alt="Andy Meme 16"></div>
+            <div class="meme-card"><img src="meme17.webp" alt="Andy Meme 17"></div>
+            <div class="meme-card"><img src="meme18.webp" alt="Andy Meme 18"></div>
+            <div class="meme-card"><img src="meme19.webp" alt="Andy Meme 19"></div>
+            <div class="meme-card"><img src="meme20.webp" alt="Andy Meme 20"></div>
+            <div class="meme-card"><img src="meme21.webp" alt="Andy Meme 21"></div>
+            <div class="meme-card"><img src="meme22.webp" alt="Andy Meme 22"></div>
+            <div class="meme-card"><img src="meme23.webp" alt="Andy Meme 23"></div>
+            <div class="meme-card"><img src="meme24.webp" alt="Andy Meme 24"></div>
+            <div class="meme-card"><img src="meme25.webp" alt="Andy Meme 25"></div>
+            <div class="meme-card"><img src="meme14.webp" alt="Andy Meme 14"></div>
+            <div class="meme-card"><img src="meme15.webp" alt="Andy Meme 15"></div>
+            <div class="meme-card"><img src="meme16.webp" alt="Andy Meme 16"></div>
+            <div class="meme-card"><img src="meme17.webp" alt="Andy Meme 17"></div>
+            <div class="meme-card"><img src="meme18.webp" alt="Andy Meme 18"></div>
+            <div class="meme-card"><img src="meme19.webp" alt="Andy Meme 19"></div>
+            <div class="meme-card"><img src="meme20.webp" alt="Andy Meme 20"></div>
+            <div class="meme-card"><img src="meme21.webp" alt="Andy Meme 21"></div>
+            <div class="meme-card"><img src="meme22.webp" alt="Andy Meme 22"></div>
+            <div class="meme-card"><img src="meme23.webp" alt="Andy Meme 23"></div>
+            <div class="meme-card"><img src="meme24.webp" alt="Andy Meme 24"></div>
+            <div class="meme-card"><img src="meme25.webp" alt="Andy Meme 25"></div>
+        </div>
+    </section>
+
+</body>
+</html>

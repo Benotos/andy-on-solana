@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>$ANDY | The Master Plan</title>
+    <style>
+        /* --- GLOBAL BUBBLY SYSTEM --- */
+        :root {
+            --andy-yellow: #fde028;
+            --andy-purple: #5e17eb;
+            --pepe-green: #4ade80;
+            --bubblegum: #ff90e8;
+            --cyan: #22d3ee;
+            --black: #111827;
+            --white: #ffffff;
+            --stroke: 4px solid var(--black);
+            --bouncy-shadow: 0px 8px 0px var(--black);
+            --bouncy-shadow-hover: 0px 0px 0px var(--black);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        }
+
+        body {
+            background-color: var(--andy-purple); /* Page specific color */
+            /* Dark candy-stripe background */
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(0, 0, 0, 0.15) 20px,
+                rgba(0, 0, 0, 0.15) 40px
+            );
+            color: var(--black);
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        /* --- STICKER-STYLE NAVIGATION --- */
+        header {
+            position: fixed;
+            width: calc(100% - 40px);
+            margin: 20px;
+            top: 0;
+            background: var(--white);
+            border: var(--stroke);
+            box-shadow: var(--bouncy-shadow);
+            border-radius: 50px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+        }
+
+        .logo-container {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            color: var(--andy-yellow);
+            -webkit-text-stroke: 2px var(--black);
+            text-shadow: 3px 3px 0 var(--andy-purple);
+            transform: rotate(-3deg);
+            animation: wiggle 3s infinite;
+            text-decoration: none;
+        }
+
+        /* Mobile Menu Setup */
+        .menu-checkbox { display: none; }
+        .menu-icon {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--black);
+            background: var(--andy-yellow);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            line-height: 40px;
+            box-shadow: 0 4px 0 var(--black);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+
+        /* Highlight the active page */
+        nav ul li a.active {
+            background: var(--andy-yellow);
+            border: 2px solid var(--black);
+            transform: rotate(-2deg);
+        }
+
+        nav ul li a:hover:not(.active) {
+            background: var(--pepe-green);
+            border: 2px solid var(--black);
+            transform: translateY(-2px) rotate(3deg);
+        }
+
+        /* --- ROADMAP HERO --- */
+        .roadmap-hero {
+            padding: 160px 5% 40px;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            color: var(--andy-yellow);
+            -webkit-text-stroke: 3px var(--black);
+            text-shadow: 6px 6px 0 var(--white), 10px 10px 0 var(--black);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            transform: rotate(-1deg);
+            animation: floatSticker 4s ease-in-out infinite;
+        }
+
+        /* --- THE TIMELINE TREASURE MAP --- */
+        .timeline-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 5% 100px;
+            position: relative;
+        }
+
+        /* The central dashed line */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            background-image: linear-gradient(to bottom, var(--white) 50%, transparent 50%);
+            background-size: 100% 30px;
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50%;
+            position: relative;
+            margin-bottom: 80px;
+            width: 100%;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: 50%;
+        }
+
+        /* The dot on the timeline */
+        .timeline-item::before {
+            content: '★';
+            position: absolute;
+            top: 20px;
+            right: calc(50% - 25px);
+            width: 50px;
+            height: 50px;
+            background: var(--andy-yellow);
+            border: var(--stroke);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--black);
+            z-index: 2;
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .timeline-item:nth-child(even)::before {
+            right: auto;
+            left: calc(50% - 25px);
+        }
+
+        /* The Sticky Cards */
+        .timeline-card {
+            background: var(--white);
+            width: 90%;
+            border: var(--stroke);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 12px 12px 0 var(--black);
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-card {
+            transform: rotate(-2deg);
+        }
+
+        .timeline-item:nth-child(even) .timeline-card {
+            transform: rotate(2deg);
+        }
+
+        /* Bubbly Phase Badges */
+        .phase-badge {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            background: var(--cyan);
+            color: var(--black);
+            font-size: 1.8rem;
+            font-weight: 900;
+            padding: 10px 20px;
+            border: var(--stroke);
+            border-radius: 30px;
+            box-shadow: 4px 4px 0 var(--black);
+            transform: rotate(-5deg);
+        }
+
+        .timeline-item:nth-child(even) .phase-badge {
+            background: var(--bubblegum);
+            left: auto;
+            right: -20px;
+            transform: rotate(5deg);
+        }
+
+        .timeline-item:nth-child(3) .phase-badge {
+            background: var(--pepe-green);
+        }
+
+        /* Card Content */
+        .timeline-card h2 {
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            color: var(--andy-purple);
+            margin-top: 10px;
+            margin-bottom: 20px;
+            -webkit-text-stroke: 1px var(--black);
+        }
+
+        .timeline-card ul {
+            list-style: none;
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            font-weight: 700;
+        }
+
+        .timeline-card ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline-card ul li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: var(--pepe-green);
+            -webkit-text-stroke: 1px var(--black);
+            font-size: 1.4rem;
+        }
+
+        /* Webp Meme Attachments for the cards */
+        .card-meme {
+            position: absolute;
+            bottom: -30px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: var(--stroke);
+            background: var(--white);
+            box-shadow: 6px 6px 0 var(--black);
+            overflow: hidden;
+            transform: rotate(10deg);
+            z-index: 10;
+        }
+
+        .timeline-item:nth-child(even) .card-meme {
+            right: auto;
+            left: -20px;
+            transform: rotate(-10deg);
+        }
+
+        .card-meme img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        @keyframes floatSticker {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+
+        /* --- MOBILE QUERIES --- */
+        @media (max-width: 900px) {
+            header {
+                width: calc(100% - 20px);
+                margin: 10px;
+                border-radius: 20px;
+            }
+            .roadmap-hero { padding-top: 140px; }
+            
+            /* Enable Mobile Menu */
+            .menu-icon { display: block; }
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                border: var(--stroke);
+                border-radius: 20px;
+                padding: 20px;
+                box-shadow: var(--bouncy-shadow);
+                margin-top: 10px;
+            }
+            .menu-checkbox:checked ~ nav ul { display: flex; }
+
+            /* Mobile Timeline Layout */
+            .timeline-container::before {
+                left: 30px; /* Move dashed line to the left edge */
+            }
+
+            .timeline-item, .timeline-item:nth-child(even) {
+                padding-right: 0;
+                padding-left: 80px; /* Make room for the line on the left */
+                justify-content: flex-start;
+            }
+
+            .timeline-item::before, .timeline-item:nth-child(even):before {
+                left: 5px; /* Align stars to the dashed line */
+                right: auto;
+            }
+
+            .timeline-card {
+                width: 100%;
+            }
+
+            .phase-badge, .timeline-item:nth-child(even) .phase-badge {
+                left: 20px;
+                right: auto;
+                top: -25px;
+            }
+
+            .card-meme, .timeline-item:nth-child(even) .card-meme {
+                right: -10px;
+                left: auto;
+                bottom: -20px;
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-container">$ANDY</a>
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        <label for="menu-toggle" class="menu-icon">☰</label>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="tokenomics.html">Tokenomics</a></li>
+                <li><a href="roadmap.html" class="active">Roadmap</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="roadmap-hero">
+        <h1 class="page-title">THE PLAN</h1>
+        <p style="color: var(--white); font-size: 1.5rem; font-weight: bold; text-shadow: 2px 2px 0 var(--black);">It's not a dream if you write it down.</p>
+    </section>
+
+    <section class="timeline-container">
+        
+        <div class="timeline-item">
+            <div class="timeline-card">
+                <div class="phase-badge">PHASE 1</div>
+                <h2>The Vibe Check</h2>
+                <ul>
+                    <li>Token Fair Launch</li>
+                    <li>Website & Socials Live</li>
+                    <li>Initial Meme Overload</li>
+                    <li>CoinGecko / CoinMarketCap Fast Track</li>
+                </ul>
+                <div class="card-meme">
+                    <img src="meme8.webp" alt="Andy Phase 1">
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-card">
+                <div class="phase-badge">PHASE 2</div>
+                <h2>Best Friends Club</h2>
+                <ul>
+                    <li>Community Partnerships</li>
+                    <li>CEX Listings (Tier 2/3)</li>
+                    <li>Trending on DexScreener & Dextools</li>
+                    <li>10,000+ Holders</li>
+                </ul>
+                <div class="card-meme">
+                    <img src="meme12.webp" alt="Andy Phase 2">
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-card">
+                <div class="phase-badge">PHASE 3</div>
+                <h2>Frog Flipping</h2>
+                <ul>
+                    <li>Major Tier 1 Exchange Listings</li>
+                    <li>Andy Merch & Real World Takeover</li>
+                    <li>Total Meme Supremacy</li>
+                    <li>The flip. You know the one.</li>
+                </ul>
+                <div class="card-meme">
+                    <img src="meme20.webp" alt="Andy Phase 3">
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+</html>
