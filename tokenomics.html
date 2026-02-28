@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>$ANDY | The Bag</title>
+    
+    <script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
+
     <style>
         /* --- GLOBAL BUBBLY SYSTEM --- */
         :root {
@@ -27,8 +30,7 @@
         }
 
         body {
-            background-color: var(--pepe-green); /* Page specific color for Tokenomics */
-            /* Candy-stripe background */
+            background-color: var(--pepe-green);
             background-image: repeating-linear-gradient(
                 -45deg,
                 transparent,
@@ -104,7 +106,6 @@
             transition: all 0.2s;
         }
 
-        /* Highlight the active page */
         nav ul li a.active {
             background: var(--andy-yellow);
             border: 2px solid var(--black);
@@ -163,7 +164,6 @@
             box-shadow: 0px 0px 0 rgba(0,0,0,0.3);
         }
 
-        /* Unique rotations for that messy sticker bomb look */
         .stat-card:nth-child(1) { transform: rotate(-3deg); }
         .stat-card:nth-child(2) { transform: rotate(2deg); background: var(--andy-yellow); }
         .stat-card:nth-child(3) { transform: rotate(-2deg); background: var(--bubblegum); }
@@ -232,10 +232,9 @@
             width: 100%;
             max-width: 600px;
             box-shadow: inset 4px 4px 0 rgba(0,0,0,0.1);
-            /* NEW: Interactive Styles */
             cursor: pointer;
             transition: all 0.2s;
-            user-select: none; /* Prevents text highlighting on double tap */
+            user-select: none;
         }
 
         .ca-box:hover {
@@ -244,11 +243,49 @@
         }
 
         .ca-box:active {
-            transform: scale(0.95); /* Squish effect when clicked */
+            transform: scale(0.95);
             box-shadow: inset 8px 8px 0 rgba(0,0,0,0.2);
         }
 
-        /* Added a spot for one of the .webp memes */
+        /* --- JUPITER SWAP CONTAINER --- */
+        .swap-container {
+            grid-column: 1 / -1;
+            background: var(--andy-purple);
+            border: var(--stroke);
+            border-radius: 40px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 12px 12px 0 rgba(0,0,0,0.4);
+            transform: rotate(-1deg);
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .swap-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            color: var(--andy-yellow);
+            -webkit-text-stroke: 2px var(--black);
+            text-shadow: 4px 4px 0 var(--black);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* The actual div Jupiter attaches to */
+        #jupiter-plugin {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0 var(--black);
+            background: var(--white); /* Gives it a clean background before loading */
+            min-height: 400px;
+        }
+
+        /* Mascot inside stats */
         .token-mascot {
             position: absolute;
             top: -60px;
@@ -289,7 +326,6 @@
             }
             .token-hero { padding-top: 140px; }
             
-            /* Enable Mobile Menu */
             .menu-icon { display: block; }
             nav ul {
                 display: none;
@@ -307,14 +343,13 @@
             }
             .menu-checkbox:checked ~ nav ul { display: flex; }
 
-            /* Stack Grid for Mobile */
             .stats-container {
                 grid-template-columns: 1fr;
                 gap: 40px;
             }
             
-            .stat-card:nth-child(1), .stat-card:nth-child(2), .stat-card:nth-child(3) {
-                transform: rotate(0deg); /* Reset rotations so they stack nicely */
+            .stat-card:nth-child(1), .stat-card:nth-child(2), .stat-card:nth-child(3), .swap-container {
+                transform: rotate(0deg); 
             }
 
             .token-mascot {
@@ -374,26 +409,29 @@
             <p style="font-weight: 700; color: rgba(0,0,0,0.6); margin-top: 10px;">Tap the address to copy. Don't get rugged by fakes.</p>
         </div>
 
+        <div class="swap-container">
+            <h2 class="swap-title">SWAP $ANDY NATIVELY</h2>
+            <p style="color: var(--white); font-weight: bold; margin-bottom: 20px;">Fastest swaps on Solana. Powered by Jupiter. 🪐</p>
+            <div id="jupiter-plugin"></div>
+        </div>
+
     </section>
+
     <script>
         function copyCA() {
-            // NOTE: Put your actual contract address inside these quotes once you launch!
             const actualCA = "TBA_OR_PASTE_CA_HERE"; 
             
             const caBox = document.getElementById("ca-box");
             
-            // Copies to the user's clipboard
             navigator.clipboard.writeText(actualCA).then(() => {
-                // Visual Feedback
                 caBox.innerText = "COPIED TO CLIPBOARD! 🚀";
                 caBox.style.background = "var(--pepe-green)";
                 caBox.style.color = "var(--white)";
                 caBox.style.transform = "scale(1.05) rotate(-2deg)";
                 
-                // Resets back to normal after 2 seconds
                 setTimeout(() => {
                     caBox.innerText = actualCA;
-                    caBox.style.background = ""; // Resets to CSS default
+                    caBox.style.background = ""; 
                     caBox.style.color = "";
                     caBox.style.transform = "";
                 }, 2000);
@@ -401,6 +439,31 @@
                 console.error('Failed to copy: ', err);
             });
         }
+    </script>
+
+    <script>
+        // Use window.onload to ensure the external Jupiter script is fully loaded before initializing
+        window.onload = function() {
+            if (window.Jupiter) {
+                window.Jupiter.init({
+                    displayMode: "widget",
+                    integratedTargetId: "jupiter-plugin",
+                    endpoint: "https://api.mainnet-beta.solana.com", 
+                    
+                    // PRO TIP: When you have the live contract address, uncomment the formProps below 
+                    // and paste your CA into the initialOutputMint to force the widget to default to buying $ANDY!
+                    
+                    /*
+                    formProps: {
+                        fixedOutputMint: true,
+                        initialOutputMint: "TBA_OR_PASTE_CA_HERE",
+                    },
+                    */
+                });
+            } else {
+                console.error("Jupiter Plugin failed to load.");
+            }
+        };
     </script>
 
 </body>
