@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>$ANDY | Pepe's Best Friend</title>
+    <title>$ANDY | Pepe's Best Friend | Premium Memecoin</title>
+    
     <style>
-        /* --- BUBBLY CARTOON SYSTEM (NOT DONKE) --- */
+        /* --- 1. CSS VARIABLES & THEME --- */
         :root {
             --andy-yellow: #fde028;
             --andy-purple: #5e17eb;
@@ -14,21 +15,26 @@
             --cyan: #22d3ee;
             --black: #111827;
             --white: #ffffff;
-            --stroke: 4px solid var(--black);
+            --stroke-width: 4px;
+            --stroke: var(--stroke-width) solid var(--black);
             --bouncy-shadow: 0px 8px 0px var(--black);
             --bouncy-shadow-hover: 0px 0px 0px var(--black);
+            --hard-shadow: 10px 10px 0px var(--black);
         }
 
+        /* --- 2. RESET & BASE --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Best for testing, import a Bubbly font later */
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            scroll-behavior: smooth;
+            cursor: none; /* Disables default cursor for custom JS cursor */
         }
 
         body {
             background-color: var(--cyan);
-            /* Candy-stripe background instead of DONKE's dots */
+            /* Bubbly Candy-stripe background */
             background-image: repeating-linear-gradient(
                 -45deg,
                 transparent,
@@ -41,7 +47,66 @@
             width: 100vw;
         }
 
-        /* --- STICKER-STYLE NAVIGATION --- */
+        /* Custom Webkit Scrollbar */
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--cyan);
+            border-left: var(--stroke);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--andy-yellow);
+            border: 3px solid var(--black);
+            border-radius: 20px;
+        }
+
+        /* --- 3. PRELOADER & CURSOR --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bubblegum);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loader-text {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--andy-yellow);
+            -webkit-text-stroke: 2px var(--black);
+            text-shadow: 4px 4px 0 var(--andy-purple);
+            animation: bounce 1s infinite alternate;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            background: var(--andy-yellow);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100000;
+            transform: translate(-50%, -50%);
+            box-shadow: 2px 2px 0 var(--black);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+
+        .cursor-hover {
+            width: 50px;
+            height: 50px;
+            background: var(--bubblegum);
+        }
+
+        /* --- 4. NAVIGATION --- */
         header {
             position: fixed;
             width: calc(100% - 40px);
@@ -50,12 +115,13 @@
             background: var(--white);
             border: var(--stroke);
             box-shadow: var(--bouncy-shadow);
-            border-radius: 50px; /* Fully rounded, unlike DONKE */
+            border-radius: 50px;
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 30px;
+            padding: 15px 40px;
+            transition: transform 0.3s;
         }
 
         .logo-container {
@@ -66,10 +132,11 @@
             text-shadow: 3px 3px 0 var(--andy-purple);
             transform: rotate(-3deg);
             animation: wiggle 3s infinite;
+            text-decoration: none;
         }
 
-        /* Mobile Menu Setup */
         .menu-checkbox { display: none; }
+        
         .menu-icon {
             display: none;
             font-size: 2rem;
@@ -78,61 +145,77 @@
             background: var(--andy-yellow);
             border: 3px solid var(--black);
             border-radius: 50%;
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             text-align: center;
-            line-height: 40px;
+            line-height: 44px;
             box-shadow: 0 4px 0 var(--black);
         }
 
         nav ul {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             list-style: none;
         }
 
         nav ul li a {
             text-decoration: none;
             color: var(--black);
-            font-size: 1.3rem;
-            font-weight: 800;
+            font-size: 1.2rem;
+            font-weight: 900;
             text-transform: uppercase;
-            padding: 8px 20px;
+            padding: 10px 25px;
             border-radius: 30px;
             transition: all 0.2s;
+            border: 2px solid transparent;
         }
 
         nav ul li a:hover {
             background: var(--bubblegum);
             border: 2px solid var(--black);
-            transform: translateY(-2px) rotate(3deg);
+            transform: translateY(-3px) rotate(3deg);
+            box-shadow: 3px 3px 0 var(--black);
         }
 
-        /* --- BUBBLY HERO SECTION --- */
+        /* --- 5. HERO SECTION --- */
         .hero {
-            min-height: 90vh;
+            min-height: 100vh;
             display: grid;
             grid-template-columns: 1fr 1fr;
             align-items: center;
-            padding: 140px 5% 40px;
-            max-width: 1400px;
+            padding: 160px 5% 60px;
+            max-width: 1500px;
             margin: 0 auto;
-            gap: 40px;
+            gap: 50px;
         }
 
         .hero-content {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
             z-index: 10;
         }
 
+        .hero-badge {
+            align-self: flex-start;
+            background: var(--andy-purple);
+            color: var(--white);
+            padding: 10px 25px;
+            border: var(--stroke);
+            border-radius: 30px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            transform: rotate(-2deg);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
         .hero-title {
-            font-size: clamp(4rem, 10vw, 8rem);
-            line-height: 0.9;
+            font-size: clamp(4rem, 10vw, 9rem);
+            line-height: 0.85;
             color: var(--white);
             -webkit-text-stroke: 3px var(--black);
-            text-shadow: 6px 6px 0 var(--andy-purple), 12px 12px 0 var(--pepe-green);
+            text-shadow: 8px 8px 0 var(--andy-purple), 14px 14px 0 var(--pepe-green);
             text-transform: uppercase;
             transform: rotate(-2deg);
         }
@@ -140,117 +223,216 @@
         .hero-desc {
             font-size: clamp(1.2rem, 3vw, 1.5rem);
             background: var(--white);
-            padding: 20px;
+            padding: 25px;
             border: var(--stroke);
-            border-radius: 20px; /* Bubbly shape */
+            border-radius: 20px;
             font-weight: bold;
             box-shadow: var(--bouncy-shadow);
             transform: rotate(1deg);
+            line-height: 1.5;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .btn {
-            padding: 15px 30px;
-            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            padding: 18px 35px;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             font-weight: 900;
             text-transform: uppercase;
             text-decoration: none;
             color: var(--black);
             border: var(--stroke);
-            border-radius: 50px; /* Pill shaped */
+            border-radius: 50px;
             box-shadow: var(--bouncy-shadow);
             transition: all 0.1s;
-            cursor: pointer;
             text-align: center;
             flex: 1;
-            min-width: 150px;
+            min-width: 180px;
         }
 
-        .btn:active, .btn:hover {
-            transform: translateY(8px); /* Physically pushes down */
+        .btn:active {
+            transform: translateY(8px);
             box-shadow: var(--bouncy-shadow-hover);
         }
 
         .btn-primary { background: var(--andy-yellow); }
         .btn-secondary { background: var(--bubblegum); }
 
-        /* Floating Sticker Art Container */
         .hero-visual {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: floatSticker 4s ease-in-out infinite;
+            animation: floatSticker 5s ease-in-out infinite;
         }
 
         .sticker-wrapper {
             background: var(--white);
-            border: 8px solid var(--white); /* Thick white sticker border */
+            border: 10px solid var(--white);
             border-radius: 40px;
-            padding: 10px;
-            box-shadow: 15px 15px 0 rgba(0,0,0,0.3);
+            padding: 15px;
+            box-shadow: 20px 20px 0 rgba(0,0,0,0.3);
             transform: rotate(4deg);
             max-width: 100%;
         }
 
-        .sticker-wrapper img {
-            width: 100%;
-            height: auto;
+        .hero-img-box {
+            width: min(80vw, 450px);
+            height: min(80vw, 450px);
+            background: var(--andy-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 30px;
             border: var(--stroke);
+            overflow: hidden;
         }
 
-        /* --- THE MEME WALL (DOUBLE MARQUEE) --- */
+        .hero-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- 6. AS SEEN ON TICKER --- */
+        .partner-ticker {
+            background: var(--black);
+            padding: 20px 0;
+            border-top: var(--stroke);
+            border-bottom: var(--stroke);
+            display: flex;
+            overflow: hidden;
+        }
+
+        .partner-track {
+            display: flex;
+            white-space: nowrap;
+            animation: scrollLeft 20s linear infinite;
+            align-items: center;
+        }
+
+        .partner-item {
+            color: var(--white);
+            font-size: 2rem;
+            font-weight: 900;
+            padding: 0 50px;
+            text-transform: uppercase;
+        }
+
+        .partner-item span {
+            color: var(--pepe-green);
+        }
+
+        /* --- 7. HOW TO BUY (SOLANA FUNNEL) --- */
+        .buy-section {
+            background: var(--pepe-green);
+            padding: 120px 5%;
+            border-bottom: var(--stroke);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: var(--white);
+            -webkit-text-stroke: 3px var(--black);
+            text-shadow: 6px 6px 0 var(--andy-purple);
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            transform: rotate(-1deg);
+        }
+
+        .steps-grid {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .step-card {
+            background: var(--white);
+            border: var(--stroke);
+            border-radius: 30px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--hard-shadow);
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+        }
+
+        .step-num {
+            position: absolute;
+            top: -25px;
+            left: -25px;
+            width: 70px;
+            height: 70px;
+            background: var(--andy-yellow);
+            border: var(--stroke);
+            border-radius: 50%;
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 60px;
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .step-card h3 {
+            font-size: 2rem;
+            color: var(--andy-purple);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .step-card p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        /* --- 8. THE MEME WALL (TRIPLE MARQUEE) --- */
         .meme-section {
             background: var(--andy-purple);
-            padding: 40px 0;
-            border-top: var(--stroke);
+            padding: 80px 0;
             border-bottom: var(--stroke);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            box-shadow: inset 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        .meme-title {
-            text-align: center;
-            color: var(--andy-yellow);
-            font-size: 3rem;
-            -webkit-text-stroke: 2px var(--black);
-            text-shadow: 4px 4px 0 var(--black);
-            margin-bottom: 10px;
+            gap: 30px;
+            box-shadow: inset 0 10px 30px rgba(0,0,0,0.4);
         }
 
         .marquee-track {
             display: flex;
             width: fit-content;
-            gap: 20px;
+            gap: 30px;
         }
 
-        .track-left { animation: scrollLeft 30s linear infinite; }
-        .track-right { animation: scrollRight 30s linear infinite; }
+        .track-left { animation: scrollLeft 40s linear infinite; }
+        .track-right { animation: scrollRight 35s linear infinite; }
+        .track-fast { animation: scrollLeft 25s linear infinite; }
 
         .meme-card {
-            width: 250px;
-            height: 250px;
+            width: 280px;
+            height: 280px;
             background: var(--white);
             border: var(--stroke);
             border-radius: 20px;
-            padding: 10px;
-            box-shadow: 6px 6px 0 var(--black);
+            padding: 15px;
+            box-shadow: 8px 8px 0 var(--black);
             flex-shrink: 0;
             transition: transform 0.2s;
         }
 
         .meme-card:hover {
-            transform: scale(1.1) rotate(-3deg);
+            transform: scale(1.1) rotate(-4deg);
             z-index: 10;
         }
 
@@ -259,67 +441,178 @@
             height: 100%;
             object-fit: cover;
             border-radius: 12px;
-            border: 2px solid var(--black);
+            border: 3px solid var(--black);
         }
 
-        /* --- ANIMATIONS --- */
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
-        }
-        @keyframes floatSticker {
-            0%, 100% { transform: translateY(0) rotate(4deg); }
-            50% { transform: translateY(-20px) rotate(2deg); }
-        }
-        @keyframes scrollLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Scrolls half its width to loop */
-        }
-        @keyframes scrollRight {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
+        /* --- 9. TOKENOMICS TEASER & CA --- */
+        .token-teaser {
+            background: var(--bubblegum);
+            padding: 100px 5%;
+            border-bottom: var(--stroke);
+            text-align: center;
         }
 
-        /* --- MOBILE QUERIES --- */
+        .ca-box {
+            background: var(--white);
+            border: var(--stroke);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: clamp(1rem, 3vw, 2rem);
+            font-weight: 900;
+            box-shadow: var(--hard-shadow);
+            cursor: pointer;
+            transition: 0.2s;
+            word-break: break-all;
+        }
+
+        .ca-box:hover {
+            transform: scale(1.02);
+            background: var(--andy-yellow);
+        }
+
+        /* --- 10. FAQ ACCORDION --- */
+        .faq-section {
+            background: var(--cyan);
+            padding: 120px 5%;
+            border-bottom: var(--stroke);
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border: var(--stroke);
+            border-radius: 20px;
+            box-shadow: var(--hard-shadow);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-question {
+            padding: 30px;
+            font-size: 1.6rem;
+            font-weight: 900;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .faq-question:hover { background: var(--andy-yellow); }
+        .faq-icon { font-size: 2.5rem; transition: transform 0.3s; }
+        
+        .faq-answer {
+            padding: 0 30px;
+            max-height: 0;
+            overflow: hidden;
+            font-size: 1.3rem;
+            font-weight: bold;
+            line-height: 1.6;
+            background: rgba(0,0,0,0.03);
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 30px;
+            max-height: 400px;
+            border-top: 3px dashed var(--black);
+        }
+
+        .faq-item.active .faq-icon { transform: rotate(45deg); color: var(--andy-purple); }
+
+        /* --- 11. MEGA FOOTER --- */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 80px 5% 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--andy-yellow);
+            -webkit-text-stroke: 2px var(--white);
+            margin-bottom: 30px;
+            display: inline-block;
+            transform: rotate(-2deg);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--white);
+            text-decoration: none;
+            text-transform: uppercase;
+            border: 3px solid var(--white);
+            padding: 12px 30px;
+            border-radius: 40px;
+            transition: 0.2s;
+        }
+
+        .footer-links a:hover {
+            background: var(--andy-purple);
+            border-color: var(--andy-purple);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(94, 23, 235, 0.5);
+        }
+
+        /* --- 12. KEYFRAMES & RESPONSIVE --- */
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+        @keyframes floatSticker { 0%, 100% { transform: translateY(0) rotate(4deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
+        @keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes scrollRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
         @media (max-width: 900px) {
-            header {
-                width: calc(100% - 20px);
-                margin: 10px;
-                border-radius: 20px;
-            }
-            .hero {
-                grid-template-columns: 1fr;
-                text-align: center;
-                padding-top: 120px;
-            }
+            header { width: calc(100% - 20px); margin: 10px; border-radius: 20px; }
+            .hero { grid-template-columns: 1fr; text-align: center; padding-top: 140px; }
+            .hero-badge { align-self: center; }
             .hero-desc { transform: rotate(0); }
             
-            /* Enable Mobile Menu */
+            /* Mobile Menu */
             .menu-icon { display: block; }
             nav ul {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--white);
-                border: var(--stroke);
-                border-radius: 20px;
-                padding: 20px;
-                box-shadow: var(--bouncy-shadow);
-                margin-top: 10px;
+                display: none; flex-direction: column; position: absolute;
+                top: 100%; left: 0; right: 0; background: var(--white);
+                border: var(--stroke); border-radius: 20px; padding: 20px;
+                box-shadow: var(--bouncy-shadow); margin-top: 10px;
             }
             .menu-checkbox:checked ~ nav ul { display: flex; }
             
-            .meme-card { width: 180px; height: 180px; }
+            .meme-card { width: 200px; height: 200px; }
+            .custom-cursor { display: none; } /* Disable custom cursor on mobile */
         }
     </style>
 </head>
 <body>
 
+    <div id="preloader">
+        <div class="loader-text">WAKING ANDY UP...</div>
+    </div>
+
+    <div class="custom-cursor" id="cursor"></div>
+
     <header>
-        <div class="logo-container">$ANDY</div>
+        <a href="index.html" class="logo-container">$ANDY</a>
         <input type="checkbox" id="menu-toggle" class="menu-checkbox">
         <label for="menu-toggle" class="menu-icon">☰</label>
         <nav>
@@ -334,83 +627,269 @@
 
     <section class="hero">
         <div class="hero-content">
+            <div class="hero-badge">Verified Boy's Club</div>
             <h1 class="hero-title">IT'S<br>ANDY!</h1>
             <p class="hero-desc">
-                Pepe's best friend. The ultimate boy's club degenerate. We are bringing the cartoon vibes straight to the blockchain. 
+                Pepe's best friend. The ultimate boy's club degenerate. We are bringing the cartoon vibes straight to the blockchain.
             </p>
             <div class="hero-buttons">
-                <a class="btn btn-primary">Join Club</a>
-                <a class="btn btn-secondary">Explore</a>
+                <a href="#buy" class="btn btn-primary interactive-element">Join Club</a>
+                <a href="#memes" class="btn btn-secondary interactive-element">Explore</a>
             </div>
         </div>
 
         <div class="hero-visual">
             <div class="sticker-wrapper">
-                <div style="width: min(80vw, 400px); height: min(80vw, 400px); background: var(--andy-yellow); display: flex; align-items: center; justify-content: center; border-radius: 30px; border: var(--stroke);">
-                    <h2 style="text-align: center;">[LOGO]</h2>
+                <div class="hero-img-box">
+                    <img src="meme1.webp" alt="Andy Hero Image">
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="meme-section">
-        <h2 class="meme-title">THE MEME STASH</h2>
-        
-        <div class="marquee-track track-left">
-            <div class="meme-card"><img src="meme1.webp" alt="Andy Meme 1"></div>
-            <div class="meme-card"><img src="mem2.webp" alt="Andy Meme 2"></div> <div class="meme-card"><img src="meme3.webp" alt="Andy Meme 3"></div>
-            <div class="meme-card"><img src="meme4.webp" alt="Andy Meme 4"></div>
-            <div class="meme-card"><img src="meme5.webp" alt="Andy Meme 5"></div>
-            <div class="meme-card"><img src="meme6.webp" alt="Andy Meme 6"></div>
-            <div class="meme-card"><img src="meme7.webp" alt="Andy Meme 7"></div>
-            <div class="meme-card"><img src="meme8.webp" alt="Andy Meme 8"></div>
-            <div class="meme-card"><img src="meme9.webp" alt="Andy Meme 9"></div>
-            <div class="meme-card"><img src="meme10.webp" alt="Andy Meme 10"></div>
-            <div class="meme-card"><img src="meme11.webp" alt="Andy Meme 11"></div>
-            <div class="meme-card"><img src="meme12.webp" alt="Andy Meme 12"></div>
-            <div class="meme-card"><img src="meme13.webp" alt="Andy Meme 13"></div>
-            <div class="meme-card"><img src="meme1.webp" alt="Andy Meme 1"></div>
-            <div class="meme-card"><img src="meme2.webp" alt="Andy Meme 2"></div>
-            <div class="meme-card"><img src="meme3.webp" alt="Andy Meme 3"></div>
-            <div class="meme-card"><img src="meme4.webp" alt="Andy Meme 4"></div>
-            <div class="meme-card"><img src="meme5.webp" alt="Andy Meme 5"></div>
-            <div class="meme-card"><img src="meme6.webp" alt="Andy Meme 6"></div>
-            <div class="meme-card"><img src="meme7.webp" alt="Andy Meme 7"></div>
-            <div class="meme-card"><img src="meme8.webp" alt="Andy Meme 8"></div>
-            <div class="meme-card"><img src="meme9.webp" alt="Andy Meme 9"></div>
-            <div class="meme-card"><img src="meme10.webp" alt="Andy Meme 10"></div>
-            <div class="meme-card"><img src="meme11.webp" alt="Andy Meme 11"></div>
-            <div class="meme-card"><img src="meme12.webp" alt="Andy Meme 12"></div>
-            <div class="meme-card"><img src="meme13.webp" alt="Andy Meme 13"></div>
+    <div class="partner-ticker">
+        <div class="partner-track">
+            <div class="partner-item">AS SEEN ON <span>SOLANA</span></div>
+            <div class="partner-item">★</div>
+            <div class="partner-item">100% <span>LOCKED</span></div>
+            <div class="partner-item">★</div>
+            <div class="partner-item">ZERO <span>TAXES</span></div>
+            <div class="partner-item">★</div>
+            <div class="partner-item">AS SEEN ON <span>SOLANA</span></div>
+            <div class="partner-item">★</div>
+            <div class="partner-item">100% <span>LOCKED</span></div>
+            <div class="partner-item">★</div>
+            <div class="partner-item">ZERO <span>TAXES</span></div>
         </div>
+    </div>
 
-        <div class="marquee-track track-right">
-            <div class="meme-card"><img src="meme14.webp" alt="Andy Meme 14"></div>
-            <div class="meme-card"><img src="meme15.webp" alt="Andy Meme 15"></div>
-            <div class="meme-card"><img src="meme16.webp" alt="Andy Meme 16"></div>
-            <div class="meme-card"><img src="meme17.webp" alt="Andy Meme 17"></div>
-            <div class="meme-card"><img src="meme18.webp" alt="Andy Meme 18"></div>
-            <div class="meme-card"><img src="meme19.webp" alt="Andy Meme 19"></div>
-            <div class="meme-card"><img src="meme20.webp" alt="Andy Meme 20"></div>
-            <div class="meme-card"><img src="meme21.webp" alt="Andy Meme 21"></div>
-            <div class="meme-card"><img src="meme22.webp" alt="Andy Meme 22"></div>
-            <div class="meme-card"><img src="meme23.webp" alt="Andy Meme 23"></div>
-            <div class="meme-card"><img src="meme24.webp" alt="Andy Meme 24"></div>
-            <div class="meme-card"><img src="meme25.webp" alt="Andy Meme 25"></div>
-            <div class="meme-card"><img src="meme14.webp" alt="Andy Meme 14"></div>
-            <div class="meme-card"><img src="meme15.webp" alt="Andy Meme 15"></div>
-            <div class="meme-card"><img src="meme16.webp" alt="Andy Meme 16"></div>
-            <div class="meme-card"><img src="meme17.webp" alt="Andy Meme 17"></div>
-            <div class="meme-card"><img src="meme18.webp" alt="Andy Meme 18"></div>
-            <div class="meme-card"><img src="meme19.webp" alt="Andy Meme 19"></div>
-            <div class="meme-card"><img src="meme20.webp" alt="Andy Meme 20"></div>
-            <div class="meme-card"><img src="meme21.webp" alt="Andy Meme 21"></div>
-            <div class="meme-card"><img src="meme22.webp" alt="Andy Meme 22"></div>
-            <div class="meme-card"><img src="meme23.webp" alt="Andy Meme 23"></div>
-            <div class="meme-card"><img src="meme24.webp" alt="Andy Meme 24"></div>
-            <div class="meme-card"><img src="meme25.webp" alt="Andy Meme 25"></div>
+    <section id="buy" class="buy-section">
+        <h2 class="section-title">HOW TO APE</h2>
+        <div class="steps-grid">
+            
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <h3>Get Phantom</h3>
+                <p>Download Phantom or your wallet of choice from the app store or Google Chrome extension store for free. Desktop users, download the google chrome extension by going to phantom.app.</p>
+            </div>
+            
+            <div class="step-card" style="transform: rotate(2deg); background: var(--cyan);">
+                <div class="step-num" style="background: var(--white);">2</div>
+                <h3>Get Some SOL</h3>
+                <p>Have SOL in your wallet to switch to $ANDY. If you don’t have any SOL, you can buy directly on Phantom, transfer from another wallet, or buy on another exchange and send it to your wallet.</p>
+            </div>
+            
+            <div class="step-card" style="transform: rotate(-2deg); background: var(--andy-yellow);">
+                <div class="step-num" style="background: var(--pepe-green);">3</div>
+                <h3>Go to Raydium</h3>
+                <p>Connect to Raydium.io or Jupiter. Paste the $ANDY token address, select Andy, and confirm. When Phantom prompts you for a wallet signature, sign.</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-num">4</div>
+                <h3>Swap for $ANDY</h3>
+                <p>Switch SOL for $ANDY. We have ZERO taxes so you don't need to worry about buying with a specific slippage, although you may need to use slippage during times of market volatility.</p>
+            </div>
+
         </div>
     </section>
 
+    <section id="memes" class="meme-section">
+        <h2 class="section-title" style="color: var(--andy-yellow); text-shadow: 6px 6px 0 var(--black); margin-bottom: 20px;">THE STASH</h2>
+        
+        <div class="marquee-track track-left">
+            <div class="meme-card"><img src="meme1.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="mem2.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme3.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme4.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme5.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme6.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme7.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme8.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme9.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme1.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="mem2.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme3.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme4.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme5.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme6.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme7.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme8.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme9.webp" alt="Andy Meme"></div>
+        </div>
+
+        <div class="marquee-track track-right">
+            <div class="meme-card"><img src="meme10.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme11.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme12.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme13.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme14.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme15.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme16.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme17.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme18.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme10.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme11.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme12.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme13.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme14.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme15.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme16.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme17.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme18.webp" alt="Andy Meme"></div>
+        </div>
+
+        <div class="marquee-track track-fast">
+            <div class="meme-card"><img src="meme19.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme20.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme21.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme22.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme23.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme24.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme25.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme26.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme19.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme20.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme21.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme22.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme23.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme24.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme25.webp" alt="Andy Meme"></div>
+            <div class="meme-card"><img src="meme26.webp" alt="Andy Meme"></div>
+        </div>
+    </section>
+
+    <section class="token-teaser">
+        <h2 class="section-title" style="margin-bottom: 20px;">CONTRACT</h2>
+        <p style="font-size: 1.5rem; font-weight: 900; margin-bottom: 40px;">Tap to copy the official $ANDY Contract Address.</p>
+        
+        <div class="ca-box interactive-element" id="home-ca" onclick="copyHomeCA()">
+            TBA_OR_PASTE_CA_HERE
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2 class="section-title">DEGEN FAQ</h2>
+        <div class="faq-container">
+            
+            <div class="faq-item">
+                <div class="faq-question interactive-element">What is $ANDY? <span class="faq-icon">+</span></div>
+                <div class="faq-answer">
+                    Andy is Pepe's oldest best friend from the Boy's Club. He's been sitting on the couch for too long. Now, he's finally stepping out to take his rightful place on the timeline. We are building a community of pure, unadulterated memecoin culture.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question interactive-element">Are there any taxes? <span class="faq-icon">+</span></div>
+                <div class="faq-answer">
+                    Zero. 0% Buy. 0% Sell. We don't do that here. You keep what you buy.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question interactive-element">Is the liquidity locked? <span class="faq-icon">+</span></div>
+                <div class="faq-answer">
+                    Yes. 100% of the LP tokens were burnt at launch, and the contract is strictly renounced. No minting, no funny business. Safu.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question interactive-element">How do I get involved? <span class="faq-icon">+</span></div>
+                <div class="faq-answer">
+                    Join the Telegram, follow us on Twitter/X, and start making memes. We are a community takeover. The more you raid, the higher we go.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">$ANDY</div>
+        <div class="footer-links">
+            <a href="#" class="interactive-element">Twitter / X</a>
+            <a href="#" class="interactive-element">Telegram Community</a>
+            <a href="#" class="interactive-element">DexScreener Chart</a>
+            <a href="#" class="interactive-element">Buy on Raydium</a>
+        </div>
+        <p style="font-size: 1.2rem; font-weight: bold; color: rgba(255,255,255,0.4); max-width: 800px; margin: 0 auto; line-height: 1.5;">
+            $ANDY is a memecoin with no intrinsic value or expectation of financial return. There is no formal team or roadmap. The coin is completely useless and for entertainment purposes only. Do your own research.
+        </p>
+    </footer>
+
+    <script>
+        // --- PRELOADER LOGIC ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.visibility = 'hidden';
+                }, 600);
+            }, 800); // Artificial delay to show off the waking up animation
+        });
+
+        // --- CUSTOM CURSOR LOGIC ---
+        const cursor = document.getElementById('cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Add grow effect when hovering over links and buttons
+        const interactables = document.querySelectorAll('a, .interactive-element, label, .menu-icon');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('cursor-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('cursor-hover');
+            });
+        });
+
+        // --- FAQ ACCORDION LOGIC ---
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                // Check if the clicked item is already active
+                const isActive = item.classList.contains('active');
+                
+                // Close all FAQ items
+                faqItems.forEach(faq => {
+                    faq.classList.remove('active');
+                });
+                
+                // If it wasn't active, open it
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // --- COPY TO CLIPBOARD LOGIC ---
+        function copyHomeCA() {
+            const actualCA = "TBA_OR_PASTE_CA_HERE"; 
+            const caBox = document.getElementById("home-ca");
+            
+            navigator.clipboard.writeText(actualCA).then(() => {
+                // Visual Feedback
+                caBox.innerText = "COPIED TO CLIPBOARD! 🚀";
+                caBox.style.background = "var(--pepe-green)";
+                caBox.style.color = "var(--white)";
+                
+                // Reset
+                setTimeout(() => {
+                    caBox.innerText = actualCA;
+                    caBox.style.background = ""; 
+                    caBox.style.color = "";
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy CA: ', err);
+            });
+        }
+    </script>
 </body>
 </html>
