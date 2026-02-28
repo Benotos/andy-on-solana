@@ -452,9 +452,16 @@
                 
                 // Initialize the widget exactly as the docs require
                 window.Jupiter.init({
-                    displayMode: "widget",
+                    displayMode: "integrated", // <-- CHANGED THIS FROM "widget" TO "integrated"
                     integratedTargetId: "jupiter-plugin",
-                    // No RPC needed, letting Jupiter Ultra handle it!
+                    
+                    // PRO TIP: Uncomment formProps below when you have the CA ready!
+                    /*
+                    formProps: {
+                        fixedOutputMint: true,
+                        initialOutputMint: "TBA_OR_PASTE_CA_HERE",
+                    },
+                    */
                 });
             }
         }, 100); // Checks every 100 milliseconds
