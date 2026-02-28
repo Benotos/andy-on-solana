@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>$ANDY | The Bag</title>
     
-    <script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
+    </head>
 
     <style>
         /* --- GLOBAL BUBBLY SYSTEM --- */
@@ -464,6 +464,23 @@
                 console.error("Jupiter Plugin failed to load.");
             }
         };
+    </script>
+    <script src="https://plugin.jup.ag/plugin-v1.js"></script>
+
+    <script>
+        // We use a tiny interval checker to wait until the browser has 100% finished downloading Jupiter
+        const jupLoader = setInterval(() => {
+            if (window.Jupiter) {
+                clearInterval(jupLoader); // Stop checking once it's found
+                
+                // Initialize the widget exactly as the docs require
+                window.Jupiter.init({
+                    displayMode: "widget",
+                    integratedTargetId: "jupiter-plugin",
+                    // No RPC needed, letting Jupiter Ultra handle it!
+                });
+            }
+        }, 100); // Checks every 100 milliseconds
     </script>
 
 </body>
